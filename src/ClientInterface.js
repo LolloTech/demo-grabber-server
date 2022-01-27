@@ -1,8 +1,7 @@
-'use strict'
+'use strict';
 
 class ClientInterface {
-
-    async fetch(url) {};
+	async fetch() {}
 }
 
-export { ClientInterface }
+export {ClientInterface};
