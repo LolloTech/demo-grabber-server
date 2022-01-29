@@ -2,6 +2,7 @@
 
 import {Server} from './server.js';
 import {Client} from './client.js';
+
 class Main {
 	constructor() {
 		this.server = new Server();
