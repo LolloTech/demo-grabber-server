@@ -6,16 +6,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src\\index.js",
+    "debug": "node --inspect src\\index.js",
     "lint": "eslint --format html -o ./eslint-report.html ."
   },
   "author": "lollotech",
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "@vscode/sqlite3": "^5.0.7",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "http-client": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^1.0.1",
     "node-fetch": "^3.2.0",
+    "sqlite3": "^5.0.2",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {

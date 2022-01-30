@@ -2,10 +2,13 @@
 
 import { Server } from './server.js';
 import { Client } from './client.js';
+import { Database } from './Database.js'
 
 class Main {
   constructor () {
-    this.server = new Server();
+    const databaseInstance = new Database();
+
+    this.server = new Server(databaseInstance);
     this.client = new Client();
   }
 
