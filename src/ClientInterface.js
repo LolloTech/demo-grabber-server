@@ -1,7 +1,7 @@
 'use strict';
 
 class ClientInterface {
-	async fetch() {}
+  async fetch() {}
 }
 
 export {ClientInterface};
