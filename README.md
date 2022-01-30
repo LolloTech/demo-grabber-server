@@ -1,5 +1,15 @@
 This readme will be filled during the new development iterations.
 
+# Credenziali dimostrative
+Nota bene: queste credenziali sono riportate per poter provare da chiamate API RESTful le varie rotte messe a 
+disposizione dal Express in server.js. Tutto qui.
+Questo in quanto questo è un software demo ad uso didattico.
+
+E' doveroso sottolineare di non riportare mai per iscritto nessuna informazione di sicurezza nè privata.
+
+
+username: admin, password: administrator
+Rotta di login: /login (come riportato da allegata collezione di postman). 
 # Database, migrations, seeds
 
 #### Creazione da zero del database sqlite
