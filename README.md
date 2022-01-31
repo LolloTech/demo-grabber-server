@@ -1,4 +1,7 @@
-This readme will be filled during the new development iterations.
+Questo è un piccolo software dimostrativo, che non è altro che un server locale che permette
+di effettuare delle chiamate ad APIs RESTful free.
+Lo scopo di questo software è di essere una piccola esercitazione nel tempo libero.
+
 
 # Credenziali dimostrative
 Nota bene: queste credenziali sono riportate per poter provare da chiamate API RESTful le varie rotte messe a 
