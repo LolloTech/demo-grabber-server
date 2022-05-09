@@ -5,25 +5,30 @@ import { APIsHandler } from './APIsHandler.js';
 
 class Server {
   constructor () {
-    this.app = express();
+    this._app = express();
     this._apisHandler = new APIsHandler();
-    this.port = 3003;
+    this._port = 3003;
     this.responseFunction = () => {
-      console.log(`Listening on port ${this.port}`);
+      console.log(`Listening on port ${this._port}`);
     };
   }
 
   setupEndpoints () {
-    const { app } = this;
+    const { _app } = this;
+    _app.use(express.json());
+    _app.use(express.urlencoded({ extended: true }));
 
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.post('/login/', this._apisHandler.loginHandler);
-    app.use(this._apisHandler.defaultHandler);
+    _app.post('/login/', (res, req) => {
+      const result = this._apisHandler.loginHandler(res);
+
+      result.isOk ? res.status(200).json({ res: result.payload }) : res.status(401).json({ res: 'unauth' });
+    });
+
+    _app.use(this._apisHandler.defaultHandler);
   }
 
   listen () {
-    return this.app.listen(this.port, this.responseFunction);
+    return this._app.listen(this._port, this.responseFunction);
   }
 }
 

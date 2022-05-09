@@ -2,6 +2,7 @@
 
 import jwt from 'jsonwebtoken';
 import { Database } from './Database.js'
+import { Result } from './Result.js';
 const privateKey = '0xDEADBEEF';
 
 class APIsHandler {
@@ -12,9 +13,9 @@ class APIsHandler {
     this.loginHandler = this.loginHandler.bind(this);
   }
 
-  async loginHandler (req, res) {
-    const username = (req.body && req.body.username) || null;
-    const password = (req.body && req.body.password) || null;
+  async loginHandler (payload) {
+    const username = (payload.body && payload.body.username) || null;
+    const password = (payload.body && payload.body.password) || null;
     const successfulUserPresence = await this._databaseInstance.findByUsernameAndPassword(username, password);
 
     let token;
@@ -25,9 +26,9 @@ class APIsHandler {
       token = jwt.sign({ id: user[0].id }, privateKey, {
         expiresIn: 60 // 60 seconds, test purpose
       });
-      return res.status(200).json({ res: token });
+      return new Result(true, token);
     }
-    return res.status(401).json({ res: 'unauth' });
+    return new Result(false, null);
   }
 
   async defaultHandler (req, res) {
@@ -38,4 +39,5 @@ class APIsHandler {
     return this.app.listen(this.port, this.responseFunction);
   }
 }
+
 export { APIsHandler }
