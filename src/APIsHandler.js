@@ -28,11 +28,11 @@ class APIsHandler {
       });
       return new Result(true, token);
     }
-    return new Result(false, null);
+    return new Result(false, {});
   }
 
   async defaultHandler (req, res) {
-    res.status(500).json({ res: 'internalServerError' });
+    return new Result(false, { error: 'Internal Server Error' });
   }
 
   listen () {

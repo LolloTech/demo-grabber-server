@@ -1,9 +1,10 @@
 'use strict';
 
 class Result {
-  constructor (isOk, payload) {
-    this._isOk = isOk;
-    this._payload = payload;
+  constructor (completedOperation, payload) {
+    if (completedOperation == null || payload == null) { throw new Error('Wrong input parameters') };
+    this.completedOperation = completedOperation;
+    this.payload = payload;
   }
 }
 

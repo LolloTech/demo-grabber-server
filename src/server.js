@@ -18,13 +18,15 @@ class Server {
     _app.use(express.json());
     _app.use(express.urlencoded({ extended: true }));
 
-    _app.post('/login/', (res, req) => {
-      const result = this._apisHandler.loginHandler(res);
+    _app.post('/login/', async (req, res) => {
+      const result = await this._apisHandler.loginHandler(req);
 
-      result.isOk ? res.status(200).json({ res: result.payload }) : res.status(401).json({ res: 'unauth' });
+      result.completedOperation ? res.status(200).json(result) : res.status(401).json(result);
     });
 
-    _app.use(this._apisHandler.defaultHandler);
+    _app.use(async (req, res) => {
+      res.status(500).json(await this._apisHandler.defaultHandler(req));
+    });
   }
 
   listen () {
