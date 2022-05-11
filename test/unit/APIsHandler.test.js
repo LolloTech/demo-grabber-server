@@ -1,9 +1,13 @@
 import sinon from 'sinon';
-import { Database } from '../src/Database.js'
-import { APIsHandler } from '../src/APIsHandler.js';
+import { Database } from '../../src/Database.js'
+import { APIsHandler } from '../../src/APIsHandler.js';
 import assert from 'assert';
+import mocha from 'mocha';
 
-describe('APIsHandler unit tests', function () {
+const describe = mocha.describe;
+const it = mocha.it;
+
+describe('APIsHandler unit tests', () => {
   it('loginHandler, should give back a valid token', async () => {
     const obj = { body: { username: 'dummy', password: '1234' } };
     const mock = sinon

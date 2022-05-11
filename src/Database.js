@@ -8,14 +8,17 @@ class Database {
     this.db = knex(config.development);
   }
 
-  findByUsername (usrname) {
-    return this.db('users').where({ username: usrname });
+  findByUsername (username) {
+    return this.db('users').where({ username: username });
   }
 
-  async findByUsernameAndPassword (usrname, pssword) {
-    const user = await this.db('users').where({ username: usrname }).catch((e) => console.log(e));
+  async findByUsernameAndPassword (username, password) {
+    if (username == null || password == null) {
+      return false;
+    }
+    const user = await this.db('users').where({ username: username }).catch((e) => console.error(e));
     const userEncryptedPass = (user.length && user[0].password) || '';
-    const result = await bcrypt.compare(pssword, userEncryptedPass);
+    const result = await bcrypt.compare(password, userEncryptedPass);
 
     return result;
   }
