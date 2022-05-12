@@ -31,6 +31,18 @@ class APIsHandler {
     return new Result(false, {});
   }
 
+  async changePassword (payload) {
+    const username = (payload.body && payload.body.username) || null;
+    const oldPassword = (payload.body && payload.body.oldPassword) || null;
+    const newPassword = (payload.body && payload.body.newPassword) || null;
+    const operationSuccess = await this._databaseInstance.changePassword(username, oldPassword, newPassword)
+
+    if (operationSuccess) {
+      return new Result(true, { res: 'passChanged' });
+    }
+    return new Result(false, { res: 'error' });
+  }
+
   async defaultHandler (req, res) {
     return new Result(false, { error: 'Internal Server Error' });
   }
