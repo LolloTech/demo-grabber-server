@@ -24,6 +24,11 @@ class Server {
 
       result.completedOperation ? res.status(200).json(result) : res.status(401).json(result);
     });
+    app.post('/changePassword/', async (req, res) => {
+      const result = await this._apisHandler.changePassword(req);
+
+      result.completedOperation ? res.status(200).json(result) : res.status(401).json(result);
+    });
 
     app.use(async (req, res) => {
       res.status(500).json(await this._apisHandler.defaultHandler(req));
