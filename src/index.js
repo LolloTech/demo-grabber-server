@@ -1,6 +1,6 @@
 'use strict';
 
-import { Server } from './server.js';
+import { Server } from './Server.js';
 
 class Main {
   constructor () {

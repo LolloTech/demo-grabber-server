@@ -80,4 +80,28 @@ describe('Unit tests of APIsHandler', () => {
       Database.prototype.changePassword.restore();
     });
   });
+  describe('setJWTVerificationParametersHandler', () => {
+    it('setJWTDateLimitValidation, GIVEN valid input parameters, SHOULD change the status of my SecurityService', async () => {
+      const obj = { activateDateVerification: 1, dateLimitString: '2100/01/01' };
+      const _sut = new APIsHandler();
+      const result = await _sut.setJWTVerificationParameters(obj.activateDateVerification, obj.dateLimitString);
+
+      assert.notDeepEqual(result, null);
+      assert.deepEqual(result.completedOperation, true);
+      assert.deepEqual(_sut._securityService._checkDateFlag, true);
+      assert.deepEqual(_sut._securityService._dateLimit, '2100/01/01');
+    });
+  });
+  describe('setJWTVerificationParametersHandler', () => {
+    it('setJWTDateLimitValidation, GIVEN valid input parameters, SHOULD change the status of my SecurityService', async () => {
+      const obj = { activateDateVerification: 1, dateLimitString: '---' };
+      const _sut = new APIsHandler();
+      const result = await _sut.setJWTVerificationParameters(obj.activateDateVerification, obj.dateLimitString);
+
+      assert.notDeepEqual(result, null);
+      assert.deepEqual(result.completedOperation, false);
+      assert.deepEqual(_sut._securityService._checkDateFlag, false);
+      assert.deepEqual(_sut._securityService._dateLimit, null);
+    });
+  });
 });

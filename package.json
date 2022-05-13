@@ -4,8 +4,9 @@
   "description": "A simple nodejs demo, backend, application.",
   "main": "src\\index.js",
   "scripts": {
+    "test": "mocha --recursive --exit --timeout 8000 .\\test\\",
     "test-integration": "mocha --exit --timeout 8000 .\\test\\integration\\",
-    "test": "mocha --exit .\\test\\unit\\",
+    "test-unit": "mocha --exit .\\test\\unit\\",
     "start": "node src\\index.js",
     "debug": "node --inspect src\\index.js",
     "lint": "eslint --format html -o ./eslint-report.html ."

@@ -1,13 +1,13 @@
 'use strict';
 
-import jwt from 'jsonwebtoken';
 import { Database } from './Database.js'
 import { Result } from './Result.js';
-const privateKey = '0xDEADBEEF';
+import { SecurityService } from './SecurityService.js';
 
 class APIsHandler {
   constructor () {
     this._databaseInstance = new Database();
+    this._securityService = new SecurityService();
 
     // Binding async functions to current this
     this.loginHandler = this.loginHandler.bind(this);
@@ -22,10 +22,9 @@ class APIsHandler {
 
     if (successfulUserPresence) {
       const user = await this._databaseInstance.findByUsername(username);
+      const payload = { id: user[0].id, emissionDate: new Date().toISOString() };
 
-      token = jwt.sign({ id: user[0].id }, privateKey, {
-        expiresIn: 60 // 60 seconds, test purpose
-      });
+      token = await this._securityService.signJWT(payload);
       return new Result(true, token);
     }
     return new Result(false, {});
@@ -41,6 +40,19 @@ class APIsHandler {
       return new Result(true, { res: 'passChanged' });
     }
     return new Result(false, { res: 'error' });
+  }
+
+  async checkToken (req, res) {
+    const result = await this._securityService.checkJwtIsValid(req.body.token);
+
+    return new Result(await this._securityService.checkJwtIsValid(req.body.token), { isTokenValid: result });
+  }
+
+  async setJWTVerificationParameters (activateDateVerification, emissionDateLimit) {
+    const setResult = await this._securityService.setJWTVerificationParameters(activateDateVerification, emissionDateLimit);
+    const result = { checkVerificationSetTo: this._securityService._checkDateFlag, limitDate: this._securityService._dateLimit };
+
+    return new Result(setResult, result);
   }
 
   async defaultHandler (req, res) {
