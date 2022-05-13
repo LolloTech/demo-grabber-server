@@ -7,7 +7,7 @@ class SecurityService {
     this._dateLimit = null;
   }
 
-  async signJWT (payload, expireSeconds = 60 * 60 * 24 * 365 * 99) {
+  async signJWT (payload, expireSeconds = 60) {
     return jwt.sign(payload, jwtSimplePrivateKey, {
       expiresIn: expireSeconds
     });
