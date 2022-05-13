@@ -49,8 +49,9 @@ describe('Unit tests of APIsHandler', () => {
       assert.notDeepEqual(result, null);
       assert.deepEqual(result.completedOperation, false);
     });
-    it('changePasswordHandler, GIVEN existing user, SHOULD changepass', async () => {
-      const obj = { body: { username: 'dummy', oldPassword: '1234', newPassword: '4321' } };
+    it('changePasswordHandler, GIVEN existing user and valid token, SHOULD changepass and return true', async () => {
+      const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4NWRiMzBmLTI2NWItNDcyNC04OTQ2LTJmOGRmZmM3YTUyMiIsImVtaXNzaW9uRGF0ZSI6IjIwMjItMDUtMTNUMDk6MzQ6NDQuNzY3WiIsImlhdCI6MTY1MjQzNDQ4NCwiZXhwIjo0Nzc0NDk4NDg0fQ.m-7Z9drcunK0HfQFfJ8SCmTF7Kg1q1VaW6pZdK_qa3o';
+      const obj = { body: { username: 'dummy', oldPassword: '1234', newPassword: '4321', token: validToken } };
       const _sut = new APIsHandler();
 
       const mock = sinon
@@ -61,6 +62,21 @@ describe('Unit tests of APIsHandler', () => {
         .atLeast(1)
       const result = await _sut.changePassword(obj);
       assert.deepEqual(result.completedOperation, true);
+      // Removing mocks for next tests
+      Database.prototype.changePassword.restore();
+    });
+    it('changePasswordHandler, GIVEN existing user and no valid token, SHOULD not changepass and return false', async () => {
+      const obj = { body: { username: 'dummy', oldPassword: '1234', newPassword: '4321' } };
+      const _sut = new APIsHandler();
+
+      const mock = sinon
+        .mock(Database.prototype)
+        .expects('changePassword')
+        .withExactArgs('dummy', '1234', '4321')
+        .returns(true)
+        .atLeast(1)
+      const result = await _sut.changePassword(obj);
+      assert.deepEqual(result.completedOperation, false);
       // Removing mocks for next tests
       Database.prototype.changePassword.restore();
     });

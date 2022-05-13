@@ -34,12 +34,20 @@ class APIsHandler {
     const username = (payload.body && payload.body.username) || null;
     const oldPassword = (payload.body && payload.body.oldPassword) || null;
     const newPassword = (payload.body && payload.body.newPassword) || null;
-    const operationSuccess = await this._databaseInstance.changePassword(username, oldPassword, newPassword)
 
-    if (operationSuccess) {
-      return new Result(true, { res: 'passChanged' });
+    try {
+      const isJWTTokenPresent = await this._securityService.checkJwtIsValid(payload.body && payload.body.token);
+      if (isJWTTokenPresent) {
+        const operationSuccess = await this._databaseInstance.changePassword(username, oldPassword, newPassword)
+        if (operationSuccess) {
+          return new Result(true, { res: 'passChanged' });
+        }
+        return new Result(false, { res: 'Error' });
+      }
+      return new Result(false, { res: 'Error no authorization' });
+    } catch (e) {
+      return false;
     }
-    return new Result(false, { res: 'error' });
   }
 
   async checkToken (req, res) {

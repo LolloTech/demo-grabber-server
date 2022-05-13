@@ -1,6 +1,7 @@
 'use strict';
 
 import express from 'express';
+import * as required from 'express-async-errors';
 import { APIsHandler } from './APIsHandler.js';
 import * as https from 'https';
 import fs from 'fs';
@@ -27,8 +28,11 @@ class Server {
     app.post('/changePassword', async (req, res) => await this._changePasswordHandler(req, res));
     app.post('/checkToken', async (req, res) => await this._checkToken(req, res));
     app.post('/setJWTDateLimitValidation', async (req, res) => await this._setJWTDateLimitValidation(req, res));
+    app.post('/ping', async (req, res) => await this._ping(req, res));
+    app.post('/provokeException', async (req, res) => { throw new Error('Exception') });
 
-    app.use(async (req, res) => await this._defaultHandler(req, res));
+    app.use(async (req, res, next) => await this._defaultHandler(req, res, next));
+    app.use(async (err, req, res, next) => await this._defaultExceptionsHandler(err, req, res, next));
   }
 
   listen () {
@@ -72,8 +76,21 @@ class Server {
     res.status(200).json(result);
   }
 
-  async _defaultHandler (req, res) {
-    res.status(500).json(await this._apisHandler.defaultHandler(req));
+  async _ping (req, res) {
+    res.status(200).json({ ok: true });
+  }
+
+  async _defaultHandler (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  }
+
+  async _defaultExceptionsHandler (err, req, res, next) {
+    res.status(err.status || 500).json({
+      message: err,
+      error: err
+    });
   }
 }
 

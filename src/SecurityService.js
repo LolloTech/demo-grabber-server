@@ -16,7 +16,7 @@ class SecurityService {
   async checkJwtIsValid (token) {
     try {
       const result = await jwt.verify(token, jwtSimplePrivateKey);
-      if (this._checkDateFlag && this._dateLimit) {
+      if (result && this._checkDateFlag && this._dateLimit) {
         if (new Date(this._dateLimit) < new Date(result.emissionDate)) {
           return false;
         }
@@ -24,7 +24,6 @@ class SecurityService {
       }
       return true;
     } catch (err) {
-      console.error(err);
       return false;
     }
   }
