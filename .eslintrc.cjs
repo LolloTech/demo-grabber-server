@@ -12,5 +12,7 @@ module.exports = {
   },
   rules: {
     'no-extra-semi': 'off',
+    'semi': 'off',
+    'quotes': 'warn'
   }
 }
